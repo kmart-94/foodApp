@@ -1,24 +1,16 @@
 import React, {useState, useEffect} from "react";
 import {View, StyleSheet, Text, Image, FlatList} from "react-native";
-import yelp from "../api/yelp";
+import useSearchById from "../hooks/useSearchById";
+
 
 function RestaurantShowScreen({navigation}) {
-  const [result, setResult] = useState(null);
   const id = navigation.getParam('id');
-
-  async function getResult(id) {
-    try {
-        const response = await yelp.get(`/${id}`);
-        setResult(response.data);
-    }
-    catch(err) {
-      console.log("whoops");
-    }
-  }
+  const {search, result, error} = useSearchById();
 
   useEffect(() => {
-    getResult(id);
+    search(id);
   }, []);
+
 
   if (!result) {
     return <Text>Loading...</Text>;
